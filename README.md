@@ -14,7 +14,7 @@ Based on Ed Donner's Udemy AI Engineering courses.
 - [Multi Agent Political Debater Notebook](02_Multi_Agent_Political_Debater.ipynb)
   - Technical Note: Experimentation with multi agent workflows. Show cases agentic engineering mastery.
   - Layperson Note: A multi agent project that debates a claim in a structured way. An LLM summarizes the debate in a neutral way.
-  - Pauline Hanson's One Nation, an Australian far right wing populist political party, has their policies criticized by AI. [Full Transcripts Here](ai-debates-gpt-6-astra-1791138961/).
+  - Pauline Hanson's One Nation, an Australian far right wing populist political party, has their policies criticized by AI. [Full Transcripts Here](ai-debates-V2-gpt-4.1-mini-1791343086/).
   - **COMPLETED**
 
 - [Schizophrenia Expert Knowledge Agent Notebook](), [Live Production Demo]()
