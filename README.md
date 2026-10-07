@@ -16,6 +16,7 @@ Based on Ed Donner's Udemy AI Engineering courses.
   - Layperson Note: A multi agent project that debates a claim in a structured way. An LLM summarizes the debate in a neutral way. A judge gives a verdic of mostly true, mostly false, or insufficient evidence. Can be reused as a generic deep research debater.
   - POLITICAL DEBATER (claims tested)
     - Pauline Hanson's One Nation, an Australian far right wing populist political party, has their policies criticized by AI. [Full Transcripts Here](ai-debates-V2-gpt-4.1-mini-1791343086/).
+      - V1 had no judge, just a neutral summarizer
       - V2 of the debate transcripts, all yield insufficient evidence, for all her policies
     - The claim that Pauline Hanson is far right wing, is mostly true, with 75% confidence
   - MEDICAL DEBATER (claims tested)
