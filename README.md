@@ -15,9 +15,10 @@ Based on Ed Donner's Udemy AI Engineering courses.
   - Technical Note: Experimentation with multi agent workflows. Show cases agentic engineering with tools, mastery.
   - Layperson Note: A multi agent project that debates a claim in a structured way. An LLM summarizes the debate in a neutral way. A judge gives a verdic of mostly true, mostly false, or insufficient evidence. Can be reused as a generic deep research debater.
   - POLITICAL DEBATER (claims tested)
-    - Pauline Hanson's One Nation, an Australian far right wing populist political party, has their policies criticized by AI. [Full Transcripts Here](ai-debates-V2-gpt-4.1-mini-1791343086/).
-      - V1 had no judge, just a neutral summarizer
-      - V2 of the debate transcripts, all yield insufficient evidence, for all her policies
+    - Pauline Hanson's One Nation, an Australian far right wing populist political party, has their policies criticized by AI. [Full Transcripts Here](ai-debates-V3-gpt-4.1-mini-1791357972/).
+      - V1 of the debate transcripts, had no judge, had no search tools, just a neutral summarizer
+      - V2, all yield insufficient evidence, for all her policies
+      - V3, search tool issues were fixed, and debate rounds were increased to 6 because there were lots of insufficient evidence judgements in V2, this V3 ended up with insufficient evidence for all policies
     - The claim that Pauline Hanson is far right wing, is mostly true, with 75% confidence
   - MEDICAL DEBATER (claims tested)
     - The claim that schizophrenics can live independently with appropriate support, unmedicated, is mostly true, with 75% confidence
