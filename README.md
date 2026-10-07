@@ -13,10 +13,15 @@ Based on Ed Donner's Udemy AI Engineering courses.
 
 - [Multi Agent Political Debater Notebook](02_Multi_Agent_Political_Debater.ipynb)
   - Technical Note: Experimentation with multi agent workflows. Show cases agentic engineering with tools, mastery.
-  - Layperson Note: A multi agent project that debates a claim in a structured way. An LLM summarizes the debate in a neutral way. A judge gives a verdic of mostly true, mostly false, or insufficient evidence.
+  - Layperson Note: A multi agent project that debates a claim in a structured way. An LLM summarizes the debate in a neutral way. A judge gives a verdic of mostly true, mostly false, or insufficient evidence. Can be reused as a generic deep research debater.
+  POLITICAL DEBATER (claims tested)
   - Pauline Hanson's One Nation, an Australian far right wing populist political party, has their policies criticized by AI. [Full Transcripts Here](ai-debates-V2-gpt-4.1-mini-1791343086/).
     - V2 of the debate transcripts, all yield insufficient evidence, for all her policies
-  - The claim that Pauline Hanson is far right wing, is mostly true with 80% confidence
+  - The claim that Pauline Hanson is far right wing, is mostly true, with 75% confidence
+  MEDICAL DEBATER (claims tested)
+  - The claim that schizophrenics can live independently with appropriate support, unmedicated, is mostly true, with 75% confidence
+  - The claim that ECT should be used on schizophrenics as a treatment option, is mostly true, with 75% confidence
+  - The claim that schizophrenics are dangerous people, is mostly false, with 85% confidence
   - **COMPLETED**
 
 - [Schizophrenia Expert Knowledge Agent Notebook](), [Live Production Demo]()
