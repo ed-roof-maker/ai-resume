@@ -3,6 +3,8 @@ A collection of notebooks for resume purposes.
 
 This repo contains research protoype projects.
 
+Visit my portfolio website [here](https://edmonddendekker.com).
+
 ## Major Practical Projects
 Based on Ed Donner's Udemy AI Engineering courses.
 
@@ -26,10 +28,10 @@ Based on Ed Donner's Udemy AI Engineering courses.
     - The claim that schizophrenics are dangerous people, is mostly false, with 85% confidence
   - **COMPLETED**
 
-- [Schizophrenia Expert Knowledge Agent Notebook](), [Live Production Demo]()
+- [Schizophrenia Expert Knowledge Agent Notebook](03_Schizophrenia_Expert_Knowledge_Agent.ipynb), [Live Production Demo](https://schizophrenia.edmonddendekker.com)
   - Technical Note: Uses agentic RAG to search a vector database for expert schizophrenia knowledge. Bias the chatbot to educate about the Australian system and local advocacy groups. Show cases RAG tuning mastery.
-  - Layperson Note: Find information about schizophrenia for Australians. Uses authoritive sources. Uses open access and free online sources. Enriched with lived experience.
-  - **Work In Progress...**
+  - Layperson Note: Find information about schizophrenia for Australians. Uses authoritive sources. Uses AI predebated sources. Enriched with lived experience.
+  - **COMPLETED**
 
 - [Digital Twin Notebook](), [Live Production Demo]()
   - Technical Note: Productionize agentic workflow. Show cases; agentic workflow in production, mastery.

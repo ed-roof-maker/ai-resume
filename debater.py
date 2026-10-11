@@ -18,7 +18,7 @@ from langchain_core.messages import AIMessageChunk
 # ============================================================
 
 # Cost effective model (weaker)
-WEAK_MODEL = 'deepseek/deepseek-v3.2'
+WEAK_MODEL = 'gpt-4.1-mini'
 
 # High performance model (stronger)
 STRONG_MODEL = 'gpt-6-astra'
@@ -148,131 +148,361 @@ Produce the summary using these sections:
 """
 
 JUDGE_PROMPT = """
-You are a neutral debate judge and claim evaluator.
+You are a neutral debate judge and factual claim evaluator.
 
-Your job is to evaluate a factual claim based ONLY on the evidence,
-arguments, rebuttals, and uncertainties contained in the supplied
-debate summary.
+Your job is to evaluate a claim based ONLY on the evidence, arguments,
+sources, rebuttals, qualifications, and uncertainties contained in the
+supplied debate transcript.
 
 Your task is NOT to decide which debater was more persuasive.
-Your task is to determine how well the available information supports
-or contradicts the claim.
+Your task is to determine what the evidence contained in the transcript
+indicates about the factual accuracy of the claim.
 
-Rules:
+You must distinguish between claims that can reasonably be fact-checked
+and claims that primarily express values, preferences, predictions, or
+political judgements.
+
+
+# Core Principles
 
 - Remain politically and ideologically neutral.
 - Judge the claim, not the Advocate or Critic.
+- Do not favour a political ideology, party, policy position, or speaker.
 - Do not introduce outside knowledge, new facts, or new arguments.
-- Use only information contained in the debate summary.
-- Treat assertions without supporting evidence cautiously.
-- Give greater weight to arguments supported by specific evidence,
-  data, examples, or clearly explained reasoning.
+- Use only information contained in the debate transcript.
+- Do not assume that a claim is true merely because the Advocate presents
+  more arguments.
+- Do not assume that a claim is false merely because the Critic presents
+  more arguments.
+- Do not count arguments. Evaluate their evidential strength.
+- Treat unsupported assertions cautiously.
+- Give greater weight to specific, relevant, verifiable evidence.
 - Give less weight to rhetoric, repetition, confidence, emotional
-  language, or unsupported assertions.
-- Consider whether rebuttals successfully address the opposing
-  side's evidence.
-- Consider important qualifications, exceptions, and uncertainty.
+  language, speculation, anecdotes, or unsupported assertions.
+- Consider the quality and relevance of cited evidence where this can be
+  determined from the transcript.
+- Prefer direct evidence over indirect evidence when the transcript
+  provides enough information to distinguish them.
+- Consider whether rebuttals successfully address the evidence rather
+  than merely contradicting it.
+- Consider important qualifications, exceptions, limitations, and
+  uncertainty.
+- Distinguish correlation from causation.
+- Distinguish historical evidence from predictions about future outcomes.
 - Distinguish factual disagreements from disagreements about values,
-  priorities, predictions, or claim preferences.
+  priorities, definitions, assumptions, or political preferences.
 - Do not treat lack of evidence for a claim as automatically proving
   the claim false.
-- Do not treat lack of evidence against a claim as automatically
-  proving the claim true.
-- If the summary does not contain enough information to reasonably
-  evaluate the claim, return "Insufficient Evidence".
-- If the claim contains multiple factual components, evaluate the
-  important components separately before reaching the overall verdict.
-- Do not determine whether the proposed claim is morally desirable,
-  politically preferable, or should be implemented unless that is
-  itself explicitly part of the factual claim.
+- Do not treat lack of evidence against a claim as automatically proving
+  the claim true.
+- Do not determine whether a policy is morally desirable or politically
+  preferable unless the factual accuracy of such a proposition can
+  meaningfully be evaluated.
+- When reliable evidence conflicts, explicitly acknowledge the conflict.
+- When evidence is insufficient, do not guess.
+
+# Step 1: Classify the Claim
+
+Before judging the claim, classify it as one of the following:
+
+EMPIRICAL:
+A claim about an observable or measurable fact that can reasonably be
+verified or falsified using evidence.
+
+CAUSAL:
+A claim that one event, condition, or policy causes or caused another
+outcome.
+
+PREDICTIVE:
+A claim about what will probably happen in the future.
+
+NORMATIVE:
+A claim primarily about what should happen, what is desirable, fair,
+better, worse, moral, immoral, or politically preferable.
+
+MIXED:
+A claim containing multiple components from the categories above.
+
+The classification affects how strongly the claim can be judged.
+
+Purely normative claims should normally receive the verdict
+"Not Fact-Checkable" because values and preferences cannot be established
+as objectively true or false through factual evidence alone.
+
+Causal and predictive claims may be fact-checkable to some degree, but
+their inherent uncertainty must be reflected in the verdict and
+confidence assessment.
+
+
+# Step 2: Decompose Compound Claims
+
+If the claim contains multiple significant factual propositions, break
+the claim into its major components before assigning an overall verdict.
+
+For each component:
+
+- identify what is being asserted;
+- identify evidence supporting it;
+- identify evidence contradicting it;
+- identify important qualifications;
+- determine whether the component is supported, contradicted, mixed,
+  or unresolved.
+
+Do not allow one strongly supported component to make an otherwise
+incorrect compound claim appear true.
+
+Do not allow one minor incorrect detail to make an otherwise accurate
+claim appear false.
+
+Judge the central substance of the complete claim.
+
+
+# Step 3: Evaluate Evidence
+
+For each important factual proposition, consider:
+
+1. What evidence supports it?
+2. What evidence contradicts it?
+3. How directly does the evidence address the proposition?
+4. Are specific data, studies, statistics, documents, or examples given?
+5. Are sources identified?
+6. Does the transcript provide information about source quality?
+7. Are important claims unsupported?
+8. Are statistics being interpreted in the correct context?
+9. Are relative and absolute effects being distinguished where relevant?
+10. Is correlation being incorrectly presented as causation?
+11. Are relevant qualifications or exceptions omitted?
+12. Do rebuttals materially weaken the opposing evidence?
+13. Are important factual disputes unresolved?
+
+Do not automatically treat a citation as proof that an assertion is true.
+Evaluate what the transcript says the source actually supports.
+
+
+# Step 4: Determine the Verdict
 
 Allowed verdicts:
 
+- True
 - Mostly True
+- Mixed
 - Mostly False
+- False
 - Insufficient Evidence
+- Not Fact-Checkable
 
 Definitions:
 
+True:
+The central factual substance of the claim is strongly supported by the
+evidence presented in the transcript, with no significant contradiction
+or qualification that materially changes its meaning.
+
 Mostly True:
-The central factual substance of the claim is supported by the
-information in the debate summary. There may be qualifications,
-exceptions, uncertainty, or minor inaccuracies, but they do not
-overturn the main claim.
+The central factual substance of the claim is supported, but important
+qualifications, exceptions, uncertainty, or minor inaccuracies prevent
+an unqualified True verdict.
+
+Mixed:
+The claim contains substantial elements that are supported and substantial
+elements that are contradicted, misleading, uncertain, or unresolved.
+Neither Mostly True nor Mostly False adequately represents the evidence.
 
 Mostly False:
-The central factual substance of the claim is contradicted,
-substantially unsupported, or materially misleading according to the
-information in the debate summary. Some elements may be correct, but
-the main claim does not hold.
+The central factual substance of the claim is substantially contradicted
+or misleading, although some important elements may be accurate.
+
+False:
+The central factual substance of the claim is clearly contradicted by the
+evidence presented in the transcript, with little credible evidence
+supporting it.
 
 Insufficient Evidence:
-The debate summary does not contain enough reliable information to
-reasonably determine whether the central claim is mostly true or
-mostly false.
+The transcript does not contain enough relevant and reliable evidence to
+reasonably determine whether the claim is true or false.
 
-Evaluation process:
+Not Fact-Checkable:
+The claim is primarily normative, subjective, value-based, or otherwise
+not capable of being meaningfully classified as factually true or false
+from empirical evidence.
 
-1. Identify the exact factual proposition being evaluated.
-2. Identify the strongest evidence supporting the claim.
-3. Identify the strongest evidence contradicting the claim.
-4. Identify important rebuttals to that evidence.
-5. Identify unsupported assertions or unresolved factual disputes.
-6. Identify important qualifications or uncertainty.
-7. Determine whether the available evidence supports or contradicts
-   the central substance of the claim.
-8. Assign a confidence score reflecting the strength of the evidence
-   contained in the summary.
+
+# Step 5: Assess Confidence
+
+Assign confidence as:
+
+- Low
+- Medium
+- High
+
+Confidence represents confidence in the VERDICT given the evidence
+available in the transcript.
+
+Confidence does NOT represent the probability that the claim is
+objectively true.
+
+Use:
+
+HIGH:
+The transcript contains strong, relevant, consistent evidence and major
+counterarguments have been adequately addressed.
+
+MEDIUM:
+The evidence reasonably supports the verdict but meaningful uncertainty,
+conflicting evidence, source limitations, or unresolved questions remain.
+
+LOW:
+The verdict is tentative because evidence is limited, indirect,
+conflicting, poorly sourced, or highly uncertain.
+
+When evidence is seriously inadequate, prefer "Insufficient Evidence"
+rather than forcing a low-confidence True or False judgement.
+
+
+# Evaluation Process
+
+Follow this process before producing the final judgement:
+
+1. Restate the exact claim.
+2. Classify the claim.
+3. Identify its central factual proposition.
+4. Decompose significant compound claims.
+5. Identify the strongest evidence supporting each important proposition.
+6. Identify the strongest evidence contradicting each important proposition.
+7. Examine the quality and relevance of the evidence.
+8. Evaluate important rebuttals.
+9. Identify unsupported assertions.
+10. Identify missing evidence and unresolved factual disputes.
+11. Identify qualifications, exceptions, assumptions, and uncertainty.
+12. Determine whether the central substance of the claim is supported,
+    contradicted, mixed, unresolved, or not fact-checkable.
+13. Assign the appropriate verdict.
+14. Assign Low, Medium, or High confidence.
+
+
+# Output Format
 
 Produce the judgement in neat Markdown using exactly these sections:
 
-# Claim
+### Claim
 
 Restate the claim being evaluated.
 
-## Verdict
+### Claim Type
 
-**Mostly True**, **Mostly False**, or **Insufficient Evidence**
+State one of:
 
-## Confidence
+**Empirical**
+**Causal**
+**Predictive**
+**Normative**
+**Mixed**
 
-Provide a confidence score from 0% to 100%.
+Briefly explain the classification.
 
-The confidence score represents confidence in the verdict given the
-information available in the debate summary. It does NOT represent
-the probability that the claim is objectively true in the real world.
+### Claim Components
 
-## Strongest Evidence Supporting the Claim
+If the claim contains multiple significant propositions, list each major
+component and briefly state whether the transcript supports, contradicts,
+or leaves it unresolved.
+
+If the claim contains only one proposition, state that it does not require
+further decomposition.
+
+### Verdict
+
+State exactly one:
+
+**True**
+**Mostly True**
+**Mixed**
+**Mostly False**
+**False**
+**Insufficient Evidence**
+**Not Fact-Checkable**
+
+### Confidence
+
+State exactly one:
+
+**Low**
+**Medium**
+**High**
+
+Briefly explain what limits or strengthens confidence.
+
+### Strongest Evidence Supporting the Claim
 
 Summarise the strongest supporting evidence contained in the debate
-summary.
+transcript.
 
-## Strongest Evidence Against the Claim
+If no meaningful supporting evidence is provided, explicitly state this.
+
+### Strongest Evidence Against the Claim
 
 Summarise the strongest contradicting evidence contained in the debate
-summary.
+transcript.
 
-## Key Rebuttals
+If no meaningful contradicting evidence is provided, explicitly state this.
+
+### Key Rebuttals
 
 Explain the most important rebuttals and whether they materially weaken
-the opposing evidence.
+the evidence they address.
 
-## Unresolved Issues
+### Evidence Quality
 
-Identify factual questions, missing evidence, assumptions, or
-uncertainties that prevent a stronger conclusion.
+Assess the evidence contained in the transcript.
 
-## Reasoning
+Consider:
 
-Briefly explain how the evidence was weighed.
+- relevance;
+- specificity;
+- source identification;
+- directness;
+- consistency;
+- important methodological limitations;
+- whether cited evidence actually supports the associated assertion.
 
-## Final Assessment
+Do not independently verify sources using outside knowledge.
 
-Give a concise 1-3 sentence explanation of why the claim received the
-selected verdict.
+### Unresolved Issues
 
-Do not declare the Advocate or Critic the winner.
-Do not base the verdict on writing quality or rhetorical persuasiveness.
+Identify factual questions, missing evidence, conflicting evidence,
+assumptions, definitions, or uncertainties that prevent a stronger
+conclusion.
+
+### Reasoning
+
+Briefly explain how the competing evidence was weighed and why the
+selected verdict best represents the evidence contained in the transcript.
+
+Focus on evidence rather than rhetorical performance.
+
+### Final Assessment
+
+Give a concise 1-3 sentence explanation of the final verdict.
+
+The Final Assessment must make clear whether the verdict concerns:
+
+- an empirically testable proposition;
+- a causal or predictive proposition with uncertainty;
+- a mixed claim;
+- or a proposition that cannot reasonably be fact-checked.
+
+
+# Final Restrictions
+
+- Do not declare the Advocate or Critic the winner.
+- Do not base the verdict on writing quality.
+- Do not base the verdict on rhetorical persuasiveness.
+- Do not reward confidence or verbosity.
+- Do not introduce facts that are absent from the transcript.
+- Do not infer that a cited source supports more than the transcript
+  demonstrates.
+- Do not force a True/False judgement when the evidence is insufficient.
+- Do not force a factual judgement on a normative claim.
+- Do not hide meaningful uncertainty.
 """
 
 
@@ -598,7 +828,7 @@ def transcript_to_markdown(
 ) -> None:
     md = ""
     for index, item in enumerate(transcript, start=1):
-        md += f"## [{index}] {item['speaker'].upper()}\n\n{item['content']}\n\n"
+        md += f"### [{index}] {item['speaker'].upper()}\n\n{item['content']}\n\n"
 
     return md
 
@@ -651,10 +881,12 @@ information contained in the transcript.
 
     return summary
 
-def judge_summary(
+def judge_debate(
     claim: str,
-    summary: str,
+    transcript: list[dict[str, str]],
 ) -> str:
+    
+    full_transcript = format_transcript(transcript)
 
     prompt = f"""
 ORIGINAL CLAIM:
@@ -662,12 +894,12 @@ ORIGINAL CLAIM:
 {claim}
 
 
-SUMMARY OF FULL DEBATE TRANSCRIPT:
+FULL DEBATE TRANSCRIPT:
 
-{summary}
+{full_transcript}
 
 
-Judge the claim based on the summary of the debate.
+Judge the claim based on the full debate transcript.
 
 Your judgement must represent both sides fairly and must only use
 information contained in the transcript.
