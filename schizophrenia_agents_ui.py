@@ -318,5 +318,6 @@ if __name__ == "__main__":
         server_name="127.0.0.1",
         server_port=7860,
         share=False,
+        root_path='/schizophrenia',
         show_error=False,
     )

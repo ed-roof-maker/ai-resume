@@ -28,12 +28,12 @@ Based on Ed Donner's Udemy AI Engineering courses.
     - The claim that schizophrenics are dangerous people, is mostly false, with 85% confidence
   - **COMPLETED**
 
-- [Schizophrenia Expert Knowledge Agent Notebook](03_Schizophrenia_Expert_Knowledge_Agent.ipynb), [Live Production Demo](https://schizophrenia.edmonddendekker.com)
+- [Schizophrenia Expert Knowledge Agent Notebook](03_Schizophrenia_Expert_Knowledge_Agent.ipynb), [Live Production Demo](https://edmonddendekker.com/schizophrenia)
   - Technical Note: Uses agentic RAG to search a vector database for expert schizophrenia knowledge. Bias the chatbot to educate about the Australian system and local advocacy groups. Show cases RAG tuning mastery.
   - Layperson Note: Find information about schizophrenia for Australians. Uses authoritive sources. Uses AI predebated sources. Enriched with lived experience.
   - **COMPLETED**
 
-- [Digital Twin Notebook](), [Live Production Demo]()
+- [Digital Twin Notebook](), [Live Production Demo](https://edmonddendekker.com/digitaltwin)
   - Technical Note: Productionize agentic workflow. Show cases; agentic workflow in production, mastery.
   - Layperson Note: Answers questions about my resume. Stores message history to Signal chat. 
   - **To Be Done...**
