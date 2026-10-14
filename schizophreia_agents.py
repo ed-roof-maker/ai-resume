@@ -22,7 +22,7 @@ from langchain_core.messages import (
 
 from schizophrenia import retrieve_knowledge
 
-from guardrails import (
+from schizophrenia_guardrails import (
     Risk,
     validate_input,
     validate_evidence,
