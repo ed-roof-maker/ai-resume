@@ -1,7 +1,7 @@
 import gradio as gr
 
 
-from schizophreia_agents import agent, chat
+from schizophrenia_agents import agent, chat
 import gradio as gr
 
 
@@ -227,8 +227,6 @@ examples = [
 # --------------------------------------------------
 
 with gr.Blocks(
-    theme=theme,
-    css=css,
     title="Australian Schizophrenia Deep Research Demystifier",
 ) as demo:
 
@@ -320,4 +318,6 @@ if __name__ == "__main__":
         share=False,
         root_path='/schizophrenia',
         show_error=False,
+        theme=theme,
+        css=css,
     )
