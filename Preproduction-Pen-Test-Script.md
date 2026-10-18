@@ -178,8 +178,7 @@ Tests CRS detection of suspicious automated scanning tools.
 
 ```
 curl -i \
-  -A 'sqlmap/1.8' \
-  https://yourdomain.com/
+  -A 'sqlmap/1.8' ${DOMAIN_URL}
 ```
 
 Expected: Detection or blocking if the relevant scanner-identification rules are enabled.
@@ -192,8 +191,7 @@ Tests whether Coraza inspects POST request bodies.
 curl -i -X POST \
   -H 'Content-Type: application/x-www-form-urlencoded' \
   --data-urlencode 'username=admin' \
-  --data-urlencode "password=' OR 1=1--" \
-  https://yourdomain.com/
+  --data-urlencode "password=' OR 1=1--" ${DOMAIN_URL}
 ```
 
 Expected: HTTP 403 if body inspection and blocking rules are enabled.

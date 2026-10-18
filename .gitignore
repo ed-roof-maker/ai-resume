@@ -7,7 +7,7 @@ __pycache__/
 *.so
 
 # Chroma DB
-chroma_db/
+chroma_db*
 
 # Distribution / packaging
 .Python

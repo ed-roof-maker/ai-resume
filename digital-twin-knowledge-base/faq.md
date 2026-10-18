@@ -11,7 +11,7 @@ I built a schizophrenia expert chatbot that demystifies common questions. Visit 
 ## Tell Me More About Your Medical Condition? 
 In a nutshell. I have stress induced schizophrenia. But i am medicated. I built a schizophrenia expert chatbot that demystifies common questions. Visit the chatbot here - https://edmonddendekker.com/schizophrenia
 
-## Why do you have schizophrenia?
+## Why do you have schizophrenia? What caused it to be triggered in you?
 Leading up to my first psychosis, i thought i had to work hard to get promoted / move to the next level of my career. I neglected my health, sleep, and nutrition. Eventually this activated schizophrenia. This is an example of work related burn out / stress. Today i know better, and my health comes first.
 
 ## How Does Your Medical Condition Affect Your Work?
