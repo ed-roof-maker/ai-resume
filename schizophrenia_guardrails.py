@@ -64,10 +64,11 @@ _MEDICATION = re.compile(
 )
 _PERSONAL = re.compile(r"\b(?:i|my|me|myself|should i|can i|for me)\b", re.I)
 _INJECTION = re.compile(
-    r"(?:ignore (?:all |your )?(?:previous|system|developer) (?:instructions|prompts)|"
-    r"reveal (?:your |the )?(?:system|developer) prompt|"
-    r"(?:disable|bypass) (?:all |your )?(?:safety|guardrails)|"
-    r"\b(?:system|developer)\s*:\s*(?:override|ignore))",
+    r"((.*|.*\n.*)(?:ignore|print)(.*|.*\n.*)(?:all|your)(.*|.*\n.*)(?:previous|system|developer)(.*|.*\n.*)(?:instructions|instruction|prompts|prompt)(.*|.*\n.*)|"
+    r"(.*|.*\n.*)(?:show|print|reveal)(.*|.*\n.*)(?:your|the)(.*|.*\n.*)(?:hidden|system|developer)(.*|.*\n.*)(?:prompt|instruction|instructions|prompts)(.*|.*\n.*)|"
+    r"(.*|.*\n.*)(?:disable|bypass)(.*|.*\n.*)(?:all|the|your)(.*|.*\n.*)(?:safety|guardrails)(.*|.*\n.*)|"
+    r"(.*|.*\n.*)(?:show|print|reveal)(.*|.*\n.*)(?:the|all|your)(.*|.*\n.*)(?:api)(.*|.*\n.*)(?:key|keys)(.*|.*\n.*)|"
+    r"\b(?:system|developer)\s*:\s*(?:override|ignore|print|reveal))",
     re.I,
 )
 _UNSAFE_OUTPUT = re.compile(
