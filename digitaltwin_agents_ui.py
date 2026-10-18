@@ -203,9 +203,8 @@ background: transparent;
 examples = [
     ['Why are there large gaps in Eds resume?'],
     ['Does Ed have a family?'],
-    ['Tell me about Eds medical condition.'],
     ['Tell me more about schizophrenia and how it affects Eds work.'],
-    ['Why does Ed have schizphrenia?'],
+    ['Why does Ed have schizophrenia?'],
     ['Does Ed work?'],
     ['Does Ed study?'],
     ['Where does Ed live?'],
